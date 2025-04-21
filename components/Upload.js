@@ -15,10 +15,11 @@ export default function Upload({ setAnalysis }) {
     if (!file) return
 
     const formData = new FormData()
-    formData.append("data", file)
+  formData.append("audioFile", file)
 
     try {
-  const response = await fetch("https://loopsage-analyzer-sitmc.hf.space/api/predict", {
+  const response = await fetch("/api/analyze", {
+
         method: "POST",
         body: formData
       })
