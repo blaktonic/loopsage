@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: loopsage-backend
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    autoDeploy: true
+    branch: main
+    rootDir: loopsage-backend
