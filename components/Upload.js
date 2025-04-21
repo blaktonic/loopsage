@@ -52,7 +52,7 @@ const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
   }
 
   return (
-    <form onSubmit={handleUpload} className="mb-6">
+<form onSubmit={handleUpload} encType="multipart/form-data" className="mb-6">
       <input type="file" name="audioFile" accept=".mp3,.wav" className="mb-2 block" />
       <button type="submit" className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
         {loading ? "Analysiere..." : "Analyse starten"}
