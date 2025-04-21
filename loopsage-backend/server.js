@@ -2,7 +2,6 @@ const express = require("express")
 const formidable = require("formidable")
 const fs = require("fs")
 const mm = require("music-metadata")
-const bpm = require("bpm-detective")
 const cors = require("cors")
 
 const app = express()
