@@ -1,5 +1,5 @@
-// Upload.js – Audio-Datei hochladen & Backend analysieren lassen
-import React, { useState } from 'react'
+// components/Upload.js – LoopSage: Upload & Analyse
+import React, { useState } from "react"
 
 export default function Upload({ setAnalysis }) {
   const [loading, setLoading] = useState(false)
