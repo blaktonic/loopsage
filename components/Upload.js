@@ -1,4 +1,3 @@
-// components/Upload.js – LoopSage: Upload & Analyse
 import React, { useState } from "react"
 
 export default function Upload({ setAnalysis }) {
@@ -12,6 +11,7 @@ export default function Upload({ setAnalysis }) {
 
     const fileInput = e.target.elements.audioFile
     const file = fileInput.files[0]
+
     if (!file) {
       setLoading(false)
       return
@@ -30,7 +30,9 @@ export default function Upload({ setAnalysis }) {
       const result = await response.json()
       const data = result?.data?.[0]
 
-      if (!data || data.error) throw new Error(data?.error || "Keine Daten erhalten")
+      if (!data || data.error) {
+        throw new Error(data?.error || "Keine Daten erhalten")
+      }
 
       const bpm = parseFloat(data.bpm)
       let bpmSmart = `${bpm}`
