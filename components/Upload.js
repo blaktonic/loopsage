@@ -18,7 +18,7 @@ export default function Upload({ setAnalysis }) {
     formData.append("data", file)
 
     try {
-      const response = await fetch("https://hf.space/embed/SitMC/loopsage-analyzer/api/predict", {
+  const response = await fetch("https://loopsage-analyzer-sitmc.hf.space/api/predict", {
         method: "POST",
         body: formData
       })
