@@ -31,8 +31,15 @@ export default async function handler(req, res) {
         body: formData,
         headers: formData.getHeaders(),
       });
-      const result = await hfRes.json();
-      res.status(200).json(result);
+
+      const text = await hfRes.text();
+      try {
+        const result = JSON.parse(text);
+        res.status(200).json(result);
+      } catch (jsonErr) {
+        console.error("HF antwortete mit:", text);
+        res.status(500).json({ error: "HF response was not valid JSON", raw: text });
+      }
     } catch (e) {
       res.status(500).json({ error: 'Fetch to HuggingFace failed' });
     }
