@@ -1,8 +1,9 @@
 {
   "functions": {
     "pages/api/analyze.js": {
-      "maxDuration": 30,
-      "memory": 512
+      "maxDuration": 60,
+      "memory": 1024,
+      "maxBytes": 52428800
     }
   }
 }
