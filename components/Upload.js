@@ -9,7 +9,7 @@ export default function Upload({ setAnalysis }) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-
+^
     const fileInput = e.target.elements.audioFile
     const file = fileInput.files[0]
    if (!file) {
@@ -22,10 +22,10 @@ export default function Upload({ setAnalysis }) {
 
     try {
 const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
-
-        method: "POST",
-        body: formData
-      })
+  method: "POST",
+  body: formData,
+  mode: "cors"
+})
 
       const result = await response.json()
       const data = result?.data?.[0]
