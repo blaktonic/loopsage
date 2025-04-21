@@ -11,8 +11,10 @@ export default function Upload({ setAnalysis }) {
     setError(null)
 
     const fileInput = e.target.elements.audioFile
-    const file = fileInput.files[0]
-    if (!file) return
+   if (!file) {
+  setLoading(false)
+  return
+}
 
     const formData = new FormData()
   formData.append("audioFile", file)
