@@ -21,7 +21,7 @@ export default function Upload({ setAnalysis }) {
   formData.append("audioFile", file)
 
     try {
-const response = await fetch("https://loopsage.onrender.com/analyze", {
+const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
 
         method: "POST",
         body: formData
