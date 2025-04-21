@@ -37,8 +37,12 @@ export default async function handler(req, res) {
         const result = JSON.parse(text);
         res.status(200).json(result);
       } catch (jsonErr) {
-        console.error("HF antwortete mit:", text);
-        res.status(500).json({ error: "HF response was not valid JSON", raw: text });
+        console.error("HF antwortete kein JSON:", text);
+        res.status(500).json({
+          error: "HF response was not valid JSON",
+          raw: text,
+          hint: "Sieh dir diesen Text an – vermutlich ist es ein Fehler wie 'Request Entity Too Large' oder HTML."
+        });
       }
     } catch (e) {
       res.status(500).json({ error: 'Fetch to HuggingFace failed' });
