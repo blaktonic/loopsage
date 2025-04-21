@@ -8,6 +8,7 @@
   },
   "dependencies": {
   "formidable": "2.1.1",
+    "form-data": "4.0.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
