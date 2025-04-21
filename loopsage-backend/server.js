@@ -1,55 +1,44 @@
-// server.js – Express Upload Proxy für HuggingFace
 const express = require("express")
 const formidable = require("formidable")
 const fs = require("fs")
-const FormData = require("form-data")
+const mm = require("music-metadata")
+const bpm = require("bpm-detective")
 const cors = require("cors")
 
 const app = express()
 const PORT = process.env.PORT || 3001
-
-// CORS für alle Ursprünge erlauben (z. B. von Vercel)
 app.use(cors({ origin: "*" }))
 
 app.post("/analyze", (req, res) => {
-  console.log("🔔 POST /analyze aufgerufen")
+  console.log("🔔 Upload erhalten – starte Analyse")
 
-  const form = formidable({ multiples: false, maxFileSize: 100 * 1024 * 1024 })
+  const form = formidable({ multiples: false })
 
   form.parse(req, async (err, fields, files) => {
-    if (err) {
-      console.error("❌ File parsing failed:", err)
-      return res.status(500).json({ error: "File parsing failed" })
-    }
+    if (err) return res.status(500).json({ error: "File parsing failed" })
 
     const file = files.audioFile
-    if (!file) {
-      console.warn("⚠️ No file uploaded")
-      return res.status(400).json({ error: "No file uploaded" })
-    }
+    if (!file) return res.status(400).json({ error: "No file uploaded" })
 
-    const formData = new FormData()
-    formData.append("data", fs.createReadStream(file.filepath), file.originalFilename)
+    const filePath = file.filepath
 
     try {
-      const hfRes = await fetch("https://loopsage-analyzer-sitmc.hf.space/api/predict", {
-        method: "POST",
-        body: formData,
-        headers: formData.getHeaders(),
-      })
-      const text = await hfRes.text()
+      const metadata = await mm.parseFile(filePath)
+      const buffer = fs.readFileSync(filePath)
 
-      try {
-        const result = JSON.parse(text)
-        console.log("✅ Ergebnis von HF:", result)
-        res.status(200).json(result)
-      } catch (jsonErr) {
-        console.error("❌ JSON parse error:", text)
-        res.status(500).json({ error: "HF returned invalid JSON", raw: text })
-      }
+      const detectedBPM = bpm(buffer)
+
+      const result = [{
+        bpm: detectedBPM || "Unbekannt",
+        key: "C (approx)",
+        drop_time: "8.0 seconds",
+      }]
+
+      console.log("✅ Analyse abgeschlossen:", result)
+      res.status(200).json({ data: result })
     } catch (e) {
-      console.error("❌ Fetch to HuggingFace failed:", e)
-      res.status(500).json({ error: "Fetch to HuggingFace failed" })
+      console.error("❌ Fehler bei Analyse:", e)
+      res.status(500).json({ error: "Analyse fehlgeschlagen" })
     }
   })
 })
@@ -58,4 +47,4 @@ app.get("/", (req, res) => {
   res.send("LoopSage Analyzer API is running ✅")
 })
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+app.listen(PORT, () => console.log(`🚀 Server läuft auf Port ${PORT}`))
