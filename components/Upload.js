@@ -1,4 +1,4 @@
-// Neue Upload.js für LoopSage mit echter HuggingFace-Analyse
+// Upload.js – Audio-Datei hochladen & Backend analysieren lassen
 import React, { useState } from 'react'
 
 export default function Upload({ setAnalysis }) {
@@ -9,23 +9,23 @@ export default function Upload({ setAnalysis }) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-^
+
     const fileInput = e.target.elements.audioFile
     const file = fileInput.files[0]
-   if (!file) {
-  setLoading(false)
-  return
-}
+    if (!file) {
+      setLoading(false)
+      return
+    }
 
     const formData = new FormData()
-  formData.append("audioFile", file)
+    formData.append("audioFile", file)
 
     try {
-const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
-  method: "POST",
-  body: formData,
-  mode: "cors"
-})
+      const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
+        method: "POST",
+        body: formData,
+        mode: "cors"
+      })
 
       const result = await response.json()
       const data = result?.data?.[0]
@@ -43,6 +43,7 @@ const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
         key: data.key,
         drop: data.drop_time
       }
+
       setAnalysis(parsed)
     } catch (err) {
       setError(err.message || "Fehler bei der Analyse")
@@ -52,8 +53,13 @@ const response = await fetch("https://loopsage-backend.onrender.com/analyze", {
   }
 
   return (
-<form onSubmit={handleUpload} encType="multipart/form-data" className="mb-6">
-      <input type="file" name="audioFile" accept=".mp3,.wav" className="mb-2 block" />
+    <form onSubmit={handleUpload} encType="multipart/form-data" className="mb-6">
+      <input
+        type="file"
+        name="audioFile"
+        accept=".mp3,.wav"
+        className="mb-2 block"
+      />
       <button type="submit" className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
         {loading ? "Analysiere..." : "Analyse starten"}
       </button>
