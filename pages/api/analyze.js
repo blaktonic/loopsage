@@ -1,5 +1,5 @@
 // pages/api/analyze.js – Proxy zur HuggingFace Analyse API
-const formidable = require('formidable');
+const form = formidable({ multiples: false, maxFileSize: 50 * 1024 * 1024 }); // 50 MB
 const fs = require('fs');
 const FormData = require('form-data');
 
